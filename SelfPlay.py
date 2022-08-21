@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 from . Util import Util
 from . MCTS import Node
-from . agent import Agent
+from . Agent import Agent
 
 class SelfPlay():
     """ 経験を収集する自己対局クラス """
