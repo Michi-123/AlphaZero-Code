@@ -16,10 +16,10 @@ setup(
     license='MIT', 
     install_requires=[],
     author='M.Uchiyama',
-    description='AlphaZero-Code', 
+    description='AlphaZeroCode', 
     long_description=long_description,
     long_description_content_type='text/markdown', 
-    keywords='AlphaZero-Code', 
+    keywords='AlphaZeroCode', 
 
     classifiers=[
         'License :: OSI Approved :: MIT License',
