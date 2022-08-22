@@ -1,6 +1,6 @@
 # AlphaZeroCode
 <pre>
-pip install alphazerocode
+pip install AlphaZeroCode
 </pre>
 You must implement tain code with Udemy rectures.
 
