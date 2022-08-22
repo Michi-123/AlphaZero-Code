@@ -10,7 +10,7 @@ with open(os.path.join(current_path, 'README.md'), encoding='utf-8') as f:
 
 
 setup(
-    name='AlphaZeroCode', 
+    name='alphazerocode', 
     packages=find_packages(exclude=('*.pyc',)),
     version='0.0.0',
     license='MIT', 
