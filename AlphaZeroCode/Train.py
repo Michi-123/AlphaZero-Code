@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import math
 import random
+import copy
 from tqdm import tqdm
 
 """ Import PyTorch framework """
@@ -42,12 +43,12 @@ class Train():
         for epoch in (range(1, self.CFG.num_epoch + 1)):
 
             """ 全データセットをシャッフル """
-            dataset = random.sample(dataset, len(dataset))
+            dataset = random.sample(dataset, len(dataset)) # 再定義しているので問題ない
 
-            iteration_size = math.ceil(len(dataset) / self.CFG.batch_size)
+            # iteration_size = math.ceil(len(dataset) / self.CFG.batch_size)
 
-            for i in range(iteration_size):
-                input_features, pi, z = self.util.make_batch(dataset[i:i + self.CFG.batch_size])
+            for i in range(0, len(dataset), CFG.batch_size):
+                input_features, pi, z = util.make_batch(dataset[i:i + CFG.batch_size])
                 self.train(input_features, pi, z)
 
             self.util.output_train_log(epoch, self.running_loss_policy, self.running_loss_value, batch_iteration_size)
