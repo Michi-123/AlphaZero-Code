@@ -12,7 +12,7 @@ with open(os.path.join(current_path, 'README.md'), encoding='utf-8') as f:
 setup(
     name='alphazerocode', 
     packages=find_packages(exclude=('*.pyc',)),
-    version='0.1.2',
+    version='0.1.3',
     license='MIT', 
     install_requires=[],
     author='M.Uchiyama',
