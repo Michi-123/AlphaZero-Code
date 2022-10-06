@@ -55,7 +55,11 @@ class SelfPlay():
             v = self.play(next_node, play_count + 1)
 
         """ 履歴データを追加 """
-        self.add_dataset(node, action, v)
+        if CFG.add_draw_data: # 引き分けを含める
+            self.add_dataset(node, action, v)
+        else: # 引き分け以外
+            if v != 0 : 
+                self.add_dataset(node, action, v)
 
         """ 符号を反転させて返却 """
         return -v
