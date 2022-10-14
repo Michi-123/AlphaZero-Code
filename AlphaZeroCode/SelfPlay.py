@@ -55,7 +55,7 @@ class SelfPlay():
             v = self.play(next_node, play_count + 1)
 
         """ 履歴データを追加 """
-        if CFG.add_draw_data: # 引き分けを含める
+        if self.CFG.add_draw_data: # 引き分けを含める
             self.add_dataset(node, action, v)
         else: # 引き分け以外
             if v != 0 : 
