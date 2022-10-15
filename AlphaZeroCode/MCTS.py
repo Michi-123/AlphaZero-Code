@@ -142,7 +142,7 @@ class MCTS():
         """ 温度パラメーター """
         if self.train:
             """ 訓練時は最初のｎ手までは確率的に """
-            tau = self.CFG.tau if play_count < self.CFG.tau_limit else 0
+            tau = self.CFG.tau if play_count <= self.CFG.tau_limit else 0
         else:
             """ 評価時には決定的に """
             tau = 0
