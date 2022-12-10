@@ -61,10 +61,8 @@ class Train():
 
     def train(self, input_features,  pi, z):
         """ 
-        define (z - v)^2 - pi^T * log(p) + c||θ||2
+        define (z - v)^2 - pi * log(p) + c||θ||2
         """
-        
-        pi = pi + 1e-10
 
         """ Predict policy and state value """
         p, v = self.model(input_features)
