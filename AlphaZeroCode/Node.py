@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @title Node
+
 """ Import libraries Original """
 import copy
 
