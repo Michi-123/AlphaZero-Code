@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # @title MCTS
 """ Import libraries Original """
 import copy
