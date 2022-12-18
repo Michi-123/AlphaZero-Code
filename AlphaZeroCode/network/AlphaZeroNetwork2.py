@@ -122,6 +122,7 @@ class AlphaZeroNetwork(nn.Module):
 
     def policy_head(self, x):
         """
+        Architecture
         The policy head applies an additional rectified, batch-normalized convolutional layer, followed by a final convolution of 73 filters for chess or 139 filters for shogi, or a linear layer of size 362 for Go, representing the logits of the respective policies described above.
         """
 
