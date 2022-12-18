@@ -78,7 +78,7 @@ class SelfPlay():
         plain = { # for debug
                  'state': states[0], 
                  'pi': pi,
-                 'z': -v,        # 符号反転（相手にとっての価値となるため）
+                 'z': v,        
                  'states': states,
                  'player': node.player,
                  'action': action,
@@ -88,7 +88,7 @@ class SelfPlay():
         data = []
         data.append(input_features)
         data.append(pi)
-        data.append([-v]) # 符号反転（相手にとっての価値となるため）
+        data.append([v])
         data.append(plain)
 
         self.dataset.append(data)
