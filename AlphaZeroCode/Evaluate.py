@@ -51,8 +51,10 @@ class Evaluate():
                     win_model1 += abs(reward)
                     break
 
-                node2 = self.util.get_next_node(node2, node1.action)
-
+#                 node2 = self.util.get_next_node(node2, node1.action)
+                node2 = Node(self.CFG, state)
+                node2.player = self.CFG.second_player
+                
                 """ AlphaZero 2 turn """
                 action_count += 1
                 node2 = player2.alpha_zero(node2)
@@ -65,7 +67,9 @@ class Evaluate():
                     win_model2 += abs(reward)
                     break
 
-                node1 = self.util.get_next_node(node1, node2.action)
+#                 node1 = self.util.get_next_node(node1, node2.action)
+                node1 = Node(self.CFG, state)
+                node1.player = self.CFG.first_player
 
             print ("count model1 model2", action_count, win_model1, win_model2)
         print()
