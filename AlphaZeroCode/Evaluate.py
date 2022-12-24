@@ -45,7 +45,8 @@ class Evaluate():
                 state, reward, done = env.step(node1.action)
 
                 if show_board: 
-                    self.util.show_board(state)
+                    #self.util.show_board(state)
+                    self.util.draw_board(state)
 
                 if done:
                     win_model1 += abs(reward)
@@ -61,7 +62,8 @@ class Evaluate():
                 state, reward, done = env.step(node2.action)
 
                 if show_board: 
-                    self.util.show_board(state)
+                    #self.util.show_board(state)
+                    self.util.draw_board(state)
 
                 if done:
                     win_model2 += abs(reward)
@@ -89,7 +91,8 @@ class Evaluate():
         """ Initialize  """
         state = env.reset()
         node = Node(self.CFG, state)
-        self.util.show_board(state)
+        #self.util.show_board(state)
+        self.util.draw_board(state)
 
         while True:
             
@@ -97,7 +100,8 @@ class Evaluate():
             action = player.human(node.states[0])
             state, reward, done = env.step(action)
 
-            self.util.show_board(state)
+            #self.util.show_board(state)
+            self.util.draw_board(state)
 
             if done:
                 win_human += reward * self.CFG.first_player
@@ -110,7 +114,8 @@ class Evaluate():
             node = player.alpha_zero(node)
             state, reward, done = env.step(node.action)
 
-            self.util.show_board(state)
+            #self.util.show_board(state)
+            self.util.draw_board(state)
 
             if done:
                 win_alpha_zero += reward
@@ -133,7 +138,8 @@ class Evaluate():
         state = env.reset()
         node = Node(self.CFG, state)
 
-        self.util.show_board(state)
+        #self.util.show_board(state)
+        self.util.draw_board(state)
 
         while True:
 
@@ -141,7 +147,8 @@ class Evaluate():
             node = player.alpha_zero(node)
             state, reward, done = env.step(node.action)
 
-            self.util.show_board(state)
+            #self.util.show_board(state)
+            self.util.draw_board(state)
 
             if done:
                 win_alpha_zero += reward
@@ -151,7 +158,8 @@ class Evaluate():
             action = player.human(env.state)
             state, reward, done = env.step(action)
 
-            self.util.show_board(state)
+            #self.util.show_board(state)
+            self.util.draw_board(state)
 
             if done:
                 win_human -= reward
@@ -162,7 +170,7 @@ class Evaluate():
         print ("AlphaZero, Human", win_alpha_zero, win_human)
         
 
-    def play_random_vs_AZ(self, play_count=1):
+    def play_random_vs_AZ(self, play_count=1, show_board=False):
         env = self.env
 
         print('Random vs AlphaZero')
