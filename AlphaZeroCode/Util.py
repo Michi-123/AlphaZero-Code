@@ -102,9 +102,9 @@ class Util:
             
             for cell in row:
                 if cell == -1:
-                    color = [255, 255, 255]
-                elif cell == 1:
                     color = [0, 0, 0]
+                elif cell == 1:
+                    color = [255, 255, 255]
                 else:
                     color = [0, 150, 0]
 
