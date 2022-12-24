@@ -3,6 +3,8 @@
 # @title Util
 import numpy as np
 import copy
+import time
+from matplotlib import pyplot as plt
 import torch
 
 class Util:
@@ -91,7 +93,39 @@ class Util:
 
         for i, row in enumerate(np.array(state)):
             print(np.where(0 > row, 2, row), i)
+            
+    def draw_board(self, state):
+        img_state = []
+        
+        for row in state:
+            img_row = []
+            
+            for cell in row:
+                if cell == -1:
+                    color = [255, 255, 255]
+                elif cell == 1:
+                    color = [0, 0, 0]
+                else:
+                    color = [0, 150, 0]
 
+                img_row.append(color)
+            img_state.append(img_row)
+
+        img_state = np.array(img_state, dtype=np.uint8)
+
+        fig = plt.figure()
+        ax = fig.add_subplot()
+        xticks = [i+1 for i in range(self.CFG.board_width)]
+        ax.set_xticks(xticks)
+
+        plt.grid(color='b', linestyle=':', linewidth=0.3)
+        plt.imshow(img_state, cmap='gray_r', vmin=0, vmax=100, interpolation='none')
+        plt.show()
+
+        # timestamp = int(time.time() * 1000)
+        # filename = "save\picture_" + str(timestamp) + ".png"
+        # plt.imsave(filename, img_gray, vmin=0, vmax=255, cmap='gray_r', format='png', origin='upper', dpi=0.01)
+        
     def indicator(self, play_count):
         progress = "";
         for i in range(play_count):
