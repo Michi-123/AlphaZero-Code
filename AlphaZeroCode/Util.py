@@ -279,3 +279,11 @@ class Util:
         self_play.dataset = dataset.tolist()
         print('Dataset loaded.')
         print('Dataset size:', len(dataset))
+
+    def save_CFG_info(self, CFG):
+        with open('CFG.txt', mode='w') as f:
+            dic = vars(self.CFG)
+            for key in dic:
+                # print( "{}:{}".format(key,dic[key] ) )        
+                f.write("{}:{}\n".format(key,dic[key]))
+        
