@@ -72,6 +72,8 @@ class Evaluate():
                 else:
                     action = self.CFG.pass_
 
+                state, reward, done = env.step(action)
+
                 if show_board: 
                     #self.util.show_board(state)
                     self.util.draw_board(state)
