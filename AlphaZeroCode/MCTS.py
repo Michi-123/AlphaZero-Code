@@ -203,7 +203,7 @@ class MCTS():
         legal_actions = self.env.get_legal_actions(node.states[0])
 
         for action in legal_actions:
-            states = self.util.get_next_states(node.states, action, node.player)
+            states = self.util.get_next_states(node.states, action, node.player, env=self.env)
             actions = self.util.get_next_actions(node.actions)
 
             child_node = Node(self.CFG)
