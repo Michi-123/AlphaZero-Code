@@ -41,8 +41,14 @@ class Evaluate():
             while True:
                 """ AlphaZero 1 turn """
                 action_count += 1
-                node1 = player1.alpha_zero(node1)
-                state, reward, done = env.step(node1.action)
+                
+                legal_actions = self.env.get_legal_actions(node1.states[0])
+                if len(legal_actions) > 0:
+                    node1 = player1.alpha_zero(node1)
+                    action = node1.action
+                else:
+                    action = self.CFG.pass_
+                state, reward, done = env.step(action)
 
                 if show_board: 
                     #self.util.show_board(state)
@@ -58,8 +64,13 @@ class Evaluate():
                 
                 """ AlphaZero 2 turn """
                 action_count += 1
-                node2 = player2.alpha_zero(node2)
-                state, reward, done = env.step(node2.action)
+                
+                legal_actions = self.env.get_legal_actions(node2.states[0])
+                if len(legal_actions) > 0:
+                    node2 = player2.alpha_zero(node2)
+                    action = node2.action
+                else:
+                    action = self.CFG.pass_
 
                 if show_board: 
                     #self.util.show_board(state)
@@ -111,8 +122,15 @@ class Evaluate():
             node = self.util.get_next_node(node, action)
 
             """ AlphaZero turn """
-            node = player.alpha_zero(node)
-            state, reward, done = env.step(node.action)
+            legal_actions = self.env.get_legal_actions(node.states[0])
+            
+            if len(legal_actions) > 0:
+                node = player.alpha_zero(node)
+                state, reward, done = env.step(node.action)
+            else:
+                action = self.CFG.pass_
+
+            state, reward, done = env.step(action)
 
             #self.util.show_board(state)
             self.util.draw_board(state)
@@ -144,9 +162,16 @@ class Evaluate():
         while True:
 
             """ AlphaZero turn """
-            node = player.alpha_zero(node)
-            state, reward, done = env.step(node.action)
+            legal_actions = self.env.get_legal_actions(node.states[0])
+            
+            if len(legal_actions) > 0:
+                node = player.alpha_zero(node)
+                state, reward, done = env.step(node.action)
+            else:
+                action = self.CFG.pass_
 
+            state, reward, done = env.step(action)
+            
             #self.util.show_board(state)
             self.util.draw_board(state)
 
@@ -198,9 +223,16 @@ class Evaluate():
                 node = self.util.get_next_node(node, action)
                 
                 """ AlphaZero turn """
-                node = player.alpha_zero(node)
-                state, reward, done = env.step(node.action)
+                legal_actions = self.env.get_legal_actions(node.states[0])
 
+                if len(legal_actions) > 0:
+                    node = player.alpha_zero(node)
+                    state, reward, done = env.step(node.action)
+                else:
+                    action = self.CFG.pass_
+
+                state, reward, done = env.step(action)
+            
                 if show_board: self.util.show_board(state)
 
                 if done:
@@ -229,8 +261,15 @@ class Evaluate():
             while True:
 
                 """ AlphaZero turn """
-                node = player.alpha_zero(node)
-                state, reward, done = env.step(node.action)
+                legal_actions = self.env.get_legal_actions(node.states[0])
+
+                if len(legal_actions) > 0:
+                    node = player.alpha_zero(node)
+                    state, reward, done = env.step(node.action)
+                else:
+                    action = self.CFG.pass_
+
+                state, reward, done = env.step(action)
 
                 if show_board: self.util.show_board(state)
 
