@@ -128,7 +128,7 @@ class Evaluate():
             
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
-                state, reward, done = env.step(node.action)
+                action = node.action
             else:
                 action = self.CFG.pass_
 
@@ -168,7 +168,7 @@ class Evaluate():
             
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
-                state, reward, done = env.step(node.action)
+                action = node.action
             else:
                 action = self.CFG.pass_
 
@@ -229,7 +229,7 @@ class Evaluate():
 
                 if len(legal_actions) > 0:
                     node = player.alpha_zero(node)
-                    state, reward, done = env.step(node.action)
+                    action = node.action
                 else:
                     action = self.CFG.pass_
 
@@ -267,7 +267,7 @@ class Evaluate():
 
                 if len(legal_actions) > 0:
                     node = player.alpha_zero(node)
-                    state, reward, done = env.step(node.action)
+                    action = node.action
                 else:
                     action = self.CFG.pass_
 
