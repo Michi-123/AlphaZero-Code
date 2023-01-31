@@ -284,6 +284,5 @@ class Util:
         with open('CFG.txt', mode='w') as f:
             dic = vars(self.CFG)
             for key in dic:
-                # print( "{}:{}".format(key,dic[key] ) )        
                 f.write("{}:{}\n".format(key,dic[key]))
         
