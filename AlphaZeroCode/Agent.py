@@ -6,49 +6,71 @@ import random
 import copy 
 from .Util import Util
 from .MCTS import MCTS
+from .Node import Node
 
 class Agent:
 
-    def __init__(self, env, model, CFG, train=True):
-
+    def __init__(self, env):
         self.env = env
-
-        """ MCTSをインスタンス化 """
+    
+    def reset():
+        pass
+    
+    def step(a):
+        pass
+    
+    
+class AlphaZero:
+    def __init__(self, CFG, env, model, train=True):
         self.mcts = MCTS(env, model, CFG, train)
+        # self.input_features = None
 
-
-    def alpha_zero(self, node, play_count=1):
-        next_node = self.mcts(node, play_count)
+    def __call__(self, node):
+        next_node = self.mcts(node)
+        # self.input_features = self.mcts.input_features
         return next_node
 
+class Human:
+    def __init__(self, env):
+        self.env = env
 
-    def human(self, state):
+    def __call__(self, legal_actions):
 
+        print([(a//self.env.lines, a%self.env.lines) for a in legal_actions])
         while True:
             x = input('縦, 横 ')
-            try:
-                x1, x2 = x.split(',')
-                x1, x2 = int(x1), int(x2)
-                if state[x1][x2] == 0:
-                    break
-            except:               
-                pass
+            action = self._coordinate2action(x)
+            if action in legal_actions:
+                break
 
-        action = x1 * self.env.width + x2
+        # next_node = self.util.get_next_node(node, action)
 
         return action
 
+    def _coordinate2action(self, x):
+        x1, x2 = x.split(' ')
+        x1, x2 = int(x1), int(x2)
+        action = x1 * self.env.lines + x2
+        return action
 
-    def random(self, state):
-        legal_actions = self.env.get_legal_actions(state)
+
+class RandomPlayer:
+    def __init__(self, env):
+        self.env = env
+
+    def __call__(self, legal_actions):
         action = random.choice(legal_actions)
         return action
 
+""" 
+Minimaxプレーヤーで最善の手を取得 
+"""
+class MiniMax:
 
-    """ 
-    Minimaxプレーヤーで最善の手を取得 
-    """
-    def player_minimax(self, env, player):
+    def __init__(self, env):
+        self.env = env
+
+    def __call__(self, node, player):
 
         """ 
         Minimax アルゴリズム 
@@ -123,10 +145,13 @@ class Agent:
         return best_action # 最善の行動インデックスを返却
 
 
+class AlphaBeta:
+    def __init__(self, env):
+        self.env = env
     """
     Alpha-betaプレーヤーで最善の手を取得 
     """
-    def player_alphabeta(self, env, player):
+    def __call__(self, node, player):
 
         """ 
         Alpha–beta pruning
