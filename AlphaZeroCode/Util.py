@@ -230,27 +230,22 @@ class Util:
 
         return pi.tolist()
 
-    def get_next_states(self, states, action, player, env=None):
+    def get_next_states(self, states, action, player, env):
         """ スタックに次の状態を追加して、古い状態を切り捨てる """
         x1, x2 = (action // self.CFG.board_width), (action % self.CFG.board_width)
         next_states = copy.deepcopy(states)
 
-        if env == None:
-            state = copy.deepcopy(next_states[0])
-            state[x1][x2] = player # 石を置く
-        else:
-            tmp_env = copy.deepcopy(env)
-            # tmp_env.states = copy.deepcopy(states)
-            state, _, _ = tmp_env.step(action)
+        tmp_env = copy.deepcopy(env) #Clone!
+        state, _, _ = tmp_env.step(action)
 
         next_states.insert(0, state) # 先頭に現在局面を追加
         next_states = next_states[:-1] # 最後の局面を廃棄
         return next_states
 
-    def get_next_actions(self, actions):
+    def get_next_actions(self, actions, action):
         next_actions = copy.deepcopy(actions)
-        next_actions = next_actions[:-1]
-        next_actions.insert(0, next_actions) # 先頭に現在局面を追加
+        next_actions.insert(0, action) # 先頭に現在の行動を追加
+        next_actions = next_actions[:-1] # 末尾を削除
         return next_actions
 
     def get_next_node(self, node, action):
