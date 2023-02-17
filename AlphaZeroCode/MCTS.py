@@ -37,7 +37,9 @@ class MCTS():
             """ ルートノードから再帰的に探索を実行 """
             self.search(root_node)
 
-        self.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
+        # self.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
+        node.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
+
 
         next_node = self.play(root_node, play_count)
 
@@ -209,3 +211,4 @@ class MCTS():
             child_node.states = states
             child_node.player = -node.player
             node.child_nodes.append(child_node)
+            
