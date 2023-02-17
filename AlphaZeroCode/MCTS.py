@@ -15,15 +15,11 @@ class MCTS():
     """
     def __init__(self, env, model, CFG, train=True):
         self.env = copy.deepcopy(env)
-        self.env.reset()
         self.model = model
         self.player = None
         self.train = train
         self.CFG = CFG
         self.util = Util(CFG)
-
-        #if not train:
-        #    self.model.eval()
 
     def __call__(self, node, play_count=1):
 
@@ -41,7 +37,7 @@ class MCTS():
             """ ルートノードから再帰的に探索を実行 """
             self.search(root_node)
 
-        node.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
+        self.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
 
         next_node = self.play(root_node, play_count)
 
@@ -51,12 +47,6 @@ class MCTS():
         return next_node
 
     def search(self, node):
-
-        """ ゲームオーバー """
-        if self.env.done:
-            v = -self.env.reward # 0 or -1
-            self.backup(node, v) # 相手の手番となるノード
-            return v
 
         """ リーフ """
         if len(node.child_nodes) == 0:
@@ -68,10 +58,16 @@ class MCTS():
         """ 選択 """
         next_node = self.select(node)
 
-        self.env.step(next_node.action)
+        _, reward, done = self.env.step(next_node.action)
 
-        """ 探索（相手の手番で） """
-        v = -self.search(next_node)
+
+        """ ゲームオーバー """
+        if done:
+            v = -reward  # 0 or -1
+
+        else:
+            """ 探索（相手の手番で） """
+            v = -self.search(next_node)
 
         """ バックアップ """ 
         self.backup(node, v) 
@@ -200,11 +196,11 @@ class MCTS():
     """ 子ノードの生成 """
     def add_child_nodes(self, node, p):
         """ 合法手の取得 """
-        legal_actions = self.env.get_legal_actions(node.states[0])
+        legal_actions = self.env.get_legal_actions()
 
         for action in legal_actions:
-            states = self.util.get_next_states(node.states, action, node.player, env=self.env)
-            actions = self.util.get_next_actions(node.actions)
+            states = self.util.get_next_states(node.states, action, node.player, self.env)
+            actions = self.util.get_next_actions(node.actions, action)
 
             child_node = Node(self.CFG)
             child_node.p = p[action]
