@@ -40,8 +40,13 @@ class MCTS():
         # self.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
         node.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
 
-
-        next_node = self.play(root_node, play_count)
+        if len(root_node.child_nodes) > 0:
+            next_node = self.play(root_node, play_count)
+        else:
+            """ 打つ手がない場合、返却ノードにパスを設定 """
+            next_node = root_node
+            next_node.player = -root_node.player
+            next_node.action = self.CFG.pass_
 
         """ 訪問回数で算出した方策を現在のノードに格納 """
         node.child_nodes = root_node.child_nodes
