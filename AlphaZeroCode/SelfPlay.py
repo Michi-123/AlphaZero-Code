@@ -73,7 +73,7 @@ class SelfPlay():
         input_features = copy.deepcopy(node.input_features).tolist()[0]
         
         # pi = one_hot_encording(node)     # 0 0 0 1 
-        pi = self.util.pobability_distribution(node) # 0.1 0.2 0.3 0.4 
+        pi = self.util.probability_distribution(node) # 0.1 0.2 0.3 0.4 
 
         plain = { # for debug
                  'state': states[0], 
