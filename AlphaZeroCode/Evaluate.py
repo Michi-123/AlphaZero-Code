@@ -17,7 +17,7 @@ class Evaluate():
         self.util = Util(CFG)
         self.render_mode = render_mode
 
-    def play_AZ_vs_AZ(self, model1, model2, play_count=1, show_board=False):
+    def play_AZ_vs_AZ(self, model1, model2, play_count=1, show_board=None):
         print('AlphaZero vs AlphaZero')
 
         env = self.env
@@ -29,7 +29,7 @@ class Evaluate():
         win_model2 = 0
 
         for count in (range(play_count)):
-            
+
             state = env.reset()
             node1 = Node(self.CFG, state)
             node2 = Node(self.CFG, state)
@@ -42,7 +42,7 @@ class Evaluate():
             while True:
                 """ AlphaZero 1 turn """
                 action_count += 1
-                
+
                 legal_actions = self.env.get_legal_actions()
                 if len(legal_actions) > 0:
                     node1 = player1.alpha_zero(node1)
@@ -51,21 +51,19 @@ class Evaluate():
                     action = self.CFG.pass_
                 state, reward, done = env.step(action)
 
-                if show_board: 
-                    #self.util.show_board(state)
-                    self.util.draw_board(state)
+                self.util.show_board(state, self.render_mode)
 
                 if done:
                     win_model1 += abs(reward)
                     break
 
-#                 node2 = self.util.get_next_node(node2, node1.action, env)
-                node2 = Node(self.CFG, state)
+                node2 = self.util.get_next_node(node2, node1.action, env)
+
                 node2.player = self.CFG.second_player
-                
+
                 """ AlphaZero 2 turn """
                 action_count += 1
-                
+
                 legal_actions = self.env.get_legal_actions()
                 if len(legal_actions) > 0:
                     node2 = player2.alpha_zero(node2)
@@ -75,17 +73,14 @@ class Evaluate():
 
                 state, reward, done = env.step(action)
 
-                if show_board: 
-                    #self.util.show_board(state)
-                    self.util.draw_board(state)
+                self.util.show_board(state, self.render_mode)
 
                 if done:
                     win_model2 += abs(reward)
                     break
 
-#                 node1 = self.util.get_next_node(node1, node2.action, env)
-                node1 = Node(self.CFG, state)
-    
+                node1 = self.util.get_next_node(node1, node2.action, env)
+
                 node1.player = self.CFG.first_player
 
             print ("count model1 model2", action_count, win_model1, win_model2)
@@ -106,28 +101,26 @@ class Evaluate():
         """ Initialize  """
         state = env.reset()
         node = Node(self.CFG, state)
-        #self.util.show_board(state)
-        self.util.draw_board(state)
+        self.util.show_board(state, self.render_mode)
 
         while True:
-            
+
             """ Human turn """
             action = player.human(node.states[0])
             state, reward, done = env.step(action)
 
-            #self.util.show_board(state)
-            self.util.draw_board(state)
+            self.util.show_board(state, self.render_mode)
 
             if done:
                 win_human += reward * self.CFG.first_player
                 break
 
             # ここは、player_human に入れるか
-            node = self.util.get_next_node(node, action, env)
+            node = self.util.get_next_node(node, action, env=env)
 
             """ AlphaZero turn """
             legal_actions = self.env.get_legal_actions()
-            
+
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
                 action = node.action
@@ -136,8 +129,7 @@ class Evaluate():
 
             state, reward, done = env.step(action)
 
-            #self.util.show_board(state)
-            self.util.draw_board(state)
+            self.util.show_board(state, self.render_mode)
 
             if done:
                 win_alpha_zero += reward
@@ -160,14 +152,13 @@ class Evaluate():
         state = env.reset()
         node = Node(self.CFG, state)
 
-        #self.util.show_board(state)
-        self.util.draw_board(state)
+        self.util.show_board(state, self.render_mode)
 
         while True:
 
             """ AlphaZero turn """
             legal_actions = self.env.get_legal_actions()
-            
+
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
                 action = node.action
@@ -175,9 +166,8 @@ class Evaluate():
                 action = self.CFG.pass_
 
             state, reward, done = env.step(action)
-            
-            #self.util.show_board(state)
-            self.util.draw_board(state)
+
+            self.util.show_board(state, self.render_mode)
 
             if done:
                 win_alpha_zero += reward
@@ -187,8 +177,7 @@ class Evaluate():
             action = player.human(env.state)
             state, reward, done = env.step(action)
 
-            #self.util.show_board(state)
-            self.util.draw_board(state)
+            self.util.show_board(state, self.render_mode)
 
             if done:
                 win_human -= reward
@@ -197,9 +186,10 @@ class Evaluate():
             node = self.util.get_next_node(node, action, env)
 
         print ("AlphaZero, Human", win_alpha_zero, win_human)
-        
 
-    def play_random_vs_AZ(self, play_count=1, show_board=False):
+
+
+    def play_random_vs_AZ(self, play_count=1, show_board=None):
         env = self.env
 
         print('Random vs AlphaZero')
@@ -209,7 +199,7 @@ class Evaluate():
         player = Agent(env, self.model, self.CFG, train=False)
 
         for count in (range(play_count)):
-            
+
             state = env.reset()
             node = Node(self.CFG, state)
 
@@ -218,14 +208,14 @@ class Evaluate():
                 action = player.random(state)
                 state, reward, done  = env.step(action)
 
-                if show_board: self.util.show_board(state)
+                self.util.show_board(state, self.render_mode)
 
                 if done:
                     win_random += abs(reward)
                     break
 
                 node = self.util.get_next_node(node, action, env)
-                
+
                 """ AlphaZero turn """
                 legal_actions = self.env.get_legal_actions()
 
@@ -236,8 +226,8 @@ class Evaluate():
                     action = self.CFG.pass_
 
                 state, reward, done = env.step(action)
-            
-                if show_board: self.util.show_board(state)
+
+                self.util.show_board(state, self.render_mode)
 
                 if done:
                     win_alpha_zero += abs(reward)
@@ -247,18 +237,18 @@ class Evaluate():
         print()
 
 
-    def play_AZ_vs_random(self, play_count=1, show_board=False):
+    def play_AZ_vs_random(self, play_count=1, show_board=None):
 
         print('AlphaZero vs Random')
         win_random = 0
         win_alpha_zero = 0
 
         env = self.env
-        
+
         player = Agent(env, self.model, self.CFG, train=False)
 
         for count in (range(play_count)):
-            
+
             state = env.reset()
             node = Node(self.CFG, state)
 
@@ -275,7 +265,7 @@ class Evaluate():
 
                 state, reward, done = env.step(action)
 
-                if show_board: self.util.show_board(state)
+                self.util.show_board(state, self.render_mode)
 
                 if done:
                     win_alpha_zero += abs(reward)
@@ -283,9 +273,9 @@ class Evaluate():
 
                 """ Random turn """
                 action = player.random(state)
-                state, reward, done  = env.step(action)
+                state, reward, done = env.step(action)
 
-                if show_board: self.util.show_board(state)
+                self.util.show_board(state, self.render_mode)
 
                 if done:
                     win_random += abs(reward)
