@@ -42,7 +42,7 @@ class Evaluate():
                 """ AlphaZero 1 turn """
                 action_count += 1
                 
-                legal_actions = self.env.get_legal_actions(node1.states[0])
+                legal_actions = self.env.get_legal_actions()
                 if len(legal_actions) > 0:
                     node1 = player1.alpha_zero(node1)
                     action = node1.action
@@ -65,7 +65,7 @@ class Evaluate():
                 """ AlphaZero 2 turn """
                 action_count += 1
                 
-                legal_actions = self.env.get_legal_actions(node2.states[0])
+                legal_actions = self.env.get_legal_actions()
                 if len(legal_actions) > 0:
                     node2 = player2.alpha_zero(node2)
                     action = node2.action
@@ -124,7 +124,7 @@ class Evaluate():
             node = self.util.get_next_node(node, action)
 
             """ AlphaZero turn """
-            legal_actions = self.env.get_legal_actions(node.states[0])
+            legal_actions = self.env.get_legal_actions()
             
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
@@ -164,7 +164,7 @@ class Evaluate():
         while True:
 
             """ AlphaZero turn """
-            legal_actions = self.env.get_legal_actions(node.states[0])
+            legal_actions = self.env.get_legal_actions()
             
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
@@ -225,7 +225,7 @@ class Evaluate():
                 node = self.util.get_next_node(node, action)
                 
                 """ AlphaZero turn """
-                legal_actions = self.env.get_legal_actions(node.states[0])
+                legal_actions = self.env.get_legal_actions()
 
                 if len(legal_actions) > 0:
                     node = player.alpha_zero(node)
@@ -263,7 +263,7 @@ class Evaluate():
             while True:
 
                 """ AlphaZero turn """
-                legal_actions = self.env.get_legal_actions(node.states[0])
+                legal_actions = self.env.get_legal_actions()
 
                 if len(legal_actions) > 0:
                     node = player.alpha_zero(node)
