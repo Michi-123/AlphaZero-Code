@@ -10,11 +10,12 @@ from . Util import Util
 from . MCTS import MCTS, Node
 
 class Evaluate():
-    def __init__(self, env, model, CFG):
+    def __init__(self, env, model, CFG, render_mode=0):
         self.env = env
         self.model = model
         self.CFG = CFG
         self.util = Util(CFG)
+        self.render_mode = render_mode
 
     def play_AZ_vs_AZ(self, model1, model2, play_count=1, show_board=False):
         print('AlphaZero vs AlphaZero')
@@ -58,7 +59,7 @@ class Evaluate():
                     win_model1 += abs(reward)
                     break
 
-#                 node2 = self.util.get_next_node(node2, node1.action)
+#                 node2 = self.util.get_next_node(node2, node1.action, env)
                 node2 = Node(self.CFG, state)
                 node2.player = self.CFG.second_player
                 
@@ -82,8 +83,9 @@ class Evaluate():
                     win_model2 += abs(reward)
                     break
 
-#                 node1 = self.util.get_next_node(node1, node2.action)
+#                 node1 = self.util.get_next_node(node1, node2.action, env)
                 node1 = Node(self.CFG, state)
+    
                 node1.player = self.CFG.first_player
 
             print ("count model1 model2", action_count, win_model1, win_model2)
@@ -121,7 +123,7 @@ class Evaluate():
                 break
 
             # ここは、player_human に入れるか
-            node = self.util.get_next_node(node, action)
+            node = self.util.get_next_node(node, action, env)
 
             """ AlphaZero turn """
             legal_actions = self.env.get_legal_actions()
@@ -192,7 +194,7 @@ class Evaluate():
                 win_human -= reward
                 break
 
-            node = self.util.get_next_node(node, action)
+            node = self.util.get_next_node(node, action, env)
 
         print ("AlphaZero, Human", win_alpha_zero, win_human)
         
@@ -222,7 +224,7 @@ class Evaluate():
                     win_random += abs(reward)
                     break
 
-                node = self.util.get_next_node(node, action)
+                node = self.util.get_next_node(node, action, env)
                 
                 """ AlphaZero turn """
                 legal_actions = self.env.get_legal_actions()
@@ -289,7 +291,7 @@ class Evaluate():
                     win_random += abs(reward)
                     break
 
-                node = self.util.get_next_node(node, action)
+                node = self.util.get_next_node(node, action, env)
 
             print ("AlphaZero , Random ", win_alpha_zero , win_random)
         print()
