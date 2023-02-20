@@ -5,9 +5,10 @@ import numpy as np
 from tqdm import tqdm
 import copy
 
-from . Agent import Agent
-from . Util import Util
-from . MCTS import MCTS, Node
+from .Agent import Agent
+from .Util import Util
+from .MCTS import MCTS, Node
+
 
 class Evaluate():
     def __init__(self, env, model, CFG, render_mode=0):
@@ -83,9 +84,8 @@ class Evaluate():
 
                 node1.player = self.CFG.first_player
 
-            print ("count model1 model2", action_count, win_model1, win_model2)
+            print("count model1 model2", action_count, win_model1, win_model2)
         print()
-
 
     def play_human_vs_AZ(self):
 
@@ -124,6 +124,7 @@ class Evaluate():
             if len(legal_actions) > 0:
                 node = player.alpha_zero(node)
                 action = node.action
+
             else:
                 action = self.CFG.pass_
 
@@ -135,7 +136,7 @@ class Evaluate():
                 win_alpha_zero += reward
                 break
 
-        print ("AlphaZero, Human", win_alpha_zero, win_human)
+        print("AlphaZero, Human", win_alpha_zero, win_human)
 
     def play_AZ_vs_human(self):
 
@@ -185,9 +186,7 @@ class Evaluate():
 
             node = self.util.get_next_node(node, action, env)
 
-        print ("AlphaZero, Human", win_alpha_zero, win_human)
-
-
+        print("AlphaZero, Human", win_alpha_zero, win_human)
 
     def play_random_vs_AZ(self, play_count=1, show_board=None):
         env = self.env
@@ -206,7 +205,7 @@ class Evaluate():
             while True:
                 """ Random turn """
                 action = player.random(state)
-                state, reward, done  = env.step(action)
+                state, reward, done = env.step(action)
 
                 self.util.show_board(state, self.render_mode)
 
@@ -233,9 +232,8 @@ class Evaluate():
                     win_alpha_zero += abs(reward)
                     break
 
-            print ("Random , AlphaZero ",win_random, win_alpha_zero)
+            print("Random , AlphaZero ", win_random, win_alpha_zero)
         print()
-
 
     def play_AZ_vs_random(self, play_count=1, show_board=None):
 
@@ -283,5 +281,5 @@ class Evaluate():
 
                 node = self.util.get_next_node(node, action, env)
 
-            print ("AlphaZero , Random ", win_alpha_zero , win_random)
+            print("AlphaZero , Random ", win_alpha_zero, win_random)
         print()
