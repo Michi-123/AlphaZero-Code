@@ -12,6 +12,17 @@ class Util:
     def __init__(self, CFG):
         self.CFG = CFG
 
+    def show_legal_actions(self, env):
+        legal_actions = env.get_legal_actions()
+        coord = []
+        for action in legal_actions:
+            lines = self.CFG.width
+            x = action // lines
+            y = action % lines
+            coord.append((x, y))
+
+        print(coord)
+
     def make_batch(self, dataset):
         """ 毎回訓練データが変わるため、DataLoaderは使わない """
         input_features = [data[0] for data in dataset]
@@ -250,6 +261,7 @@ class Util:
 
         if env:
             tmp_env = copy.deepcopy(env)  # Clone!
+            tmp_env.player = player
             state, _, _ = tmp_env.step(action)
         else:
             state = copy.deepcopy(next_states[0])
@@ -273,6 +285,7 @@ class Util:
                 if child_node.action == action:
                     next_node = child_node
                     break
+
         else:
             """ 初回訪問の場合は、今のノードを直接書き換える """
             states = self.get_next_states(node.states, action, node.player, env)
