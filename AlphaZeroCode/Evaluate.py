@@ -32,6 +32,8 @@ class Evaluate():
         for count in (range(play_count)):
 
             state = env.reset()
+            env.render()
+
             node1 = Node(self.CFG, state)
             node2 = Node(self.CFG, state)
 
@@ -56,11 +58,16 @@ class Evaluate():
 
                 if done:
                     win_model1 += abs(reward)
+                    # win_model1 += reward
                     break
 
-                node2 = self.util.get_next_node(node2, node1.action, env)
-
+                ##################################
+                # print(legal_actions)
+                # self.util.show_board(node2.states[0])
+                node2 = self.util.get_next_node(node2, action, env)
+                # self.util.show_board(node2.states[0])
                 node2.player = self.CFG.second_player
+                ##################################
 
                 """ AlphaZero 2 turn """
                 action_count += 1
@@ -78,11 +85,16 @@ class Evaluate():
 
                 if done:
                     win_model2 += abs(reward)
+                    # win_model2 += reward
                     break
 
-                node1 = self.util.get_next_node(node1, node2.action, env)
-
+                ##################################
+                # print(legal_actions)
+                # self.util.show_board(node1.states[0])
+                node1 = self.util.get_next_node(node1, action, env)
+                # self.util.show_board(node1.states[0])
                 node1.player = self.CFG.first_player
+                ##################################
 
             print("count model1 model2", action_count, win_model1, win_model2)
         print()
