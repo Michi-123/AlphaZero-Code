@@ -16,7 +16,7 @@ class Util:
         legal_actions = env.get_legal_actions()
         coord = []
         for action in legal_actions:
-            lines = self.CFG.width
+            lines = self.CFG.board_width
             x = action // lines
             y = action % lines
             coord.append((x, y))
