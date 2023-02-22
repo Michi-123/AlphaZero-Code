@@ -317,3 +317,6 @@ class Util:
             dic = vars(self.CFG)
             for key in dic:
                 f.write("{}:{}\n".format(key, dic[key]))
+                
+    def show_board_from_node(self, node):
+        self.show_board_text( node.states[0])
