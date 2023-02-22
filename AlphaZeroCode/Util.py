@@ -291,7 +291,6 @@ class Util:
             states = self.get_next_states(node.states, action, node.player, env)
             next_node = copy.deepcopy(node)
             next_node.states = states
-            next_node.player = -node.player
 
         return next_node
 
