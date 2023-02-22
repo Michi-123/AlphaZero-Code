@@ -10,7 +10,7 @@ from .Util import Util
 from .MCTS import MCTS, Node
 
 
-class Evaluate():
+class Evaluate:
     def __init__(self, env, model, CFG, render_mode=0):
         self.env = env
         self.model = model
@@ -61,13 +61,7 @@ class Evaluate():
                     # win_model1 += reward
                     break
 
-                ##################################
-                # print(legal_actions)
-                # self.util.show_board(node2.states[0])
                 node2 = self.util.get_next_node(node2, action, env)
-                # self.util.show_board(node2.states[0])
-                node2.player = self.CFG.second_player
-                ##################################
 
                 """ AlphaZero 2 turn """
                 action_count += 1
@@ -88,13 +82,7 @@ class Evaluate():
                     # win_model2 += reward
                     break
 
-                ##################################
-                # print(legal_actions)
-                # self.util.show_board(node1.states[0])
                 node1 = self.util.get_next_node(node1, action, env)
-                # self.util.show_board(node1.states[0])
-                node1.player = self.CFG.first_player
-                ##################################
 
             print("count model1 model2", action_count, win_model1, win_model2)
         print()
@@ -113,6 +101,7 @@ class Evaluate():
         """ Initialize  """
         state = env.reset()
         node = Node(self.CFG, state)
+        node.player = self.CFG.second_player  # 後手
         self.util.show_board(state, self.render_mode)
 
         while True:
@@ -164,6 +153,7 @@ class Evaluate():
         """ Initialize  """
         state = env.reset()
         node = Node(self.CFG, state)
+        node.player = self.CFG.first_player  # 先手
 
         self.util.show_board(state, self.render_mode)
 
@@ -213,6 +203,7 @@ class Evaluate():
 
             state = env.reset()
             node = Node(self.CFG, state)
+            node.player = self.CFG.second_player
 
             while True:
                 """ Random turn """
@@ -261,6 +252,7 @@ class Evaluate():
 
             state = env.reset()
             node = Node(self.CFG, state)
+            node.player = self.CFG.first_player
 
             while True:
 
