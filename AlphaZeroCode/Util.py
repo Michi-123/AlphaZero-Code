@@ -287,8 +287,8 @@ class Util:
                     break
 
         else:
-            """ 初回訪問の場合は、今のノードを直接書き換える """
-            states = self.get_next_states(node.states, action, node.player, env)
+            """ 初回訪問の場合は、今のノードを直接書き換える (プレーヤーを反転)"""
+            states = self.get_next_states(node.states, action, -node.player, env)
             next_node = copy.deepcopy(node)
             next_node.states = states
 
