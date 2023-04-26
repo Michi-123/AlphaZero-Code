@@ -216,4 +216,3 @@ class MCTS():
             child_node.states = states
             child_node.player = -node.player
             node.child_nodes.append(child_node)
-            
