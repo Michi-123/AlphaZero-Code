@@ -51,7 +51,7 @@ class Train():
 
             for i in range(0, len(dataset), self.CFG.batch_size):
                 input_features, pi, z = self.util.make_batch(dataset[i:i + self.CFG.batch_size])
-                self.train(input_features, pi, z)
+                self.update(input_features, pi, z)
 
             self.util.output_train_log(epoch, self.running_loss_policy, self.running_loss_value, batch_iteration_size)
 
@@ -59,7 +59,7 @@ class Train():
             self.running_loss_value = 0.0
 
 
-    def train(self, input_features,  pi, z):
+    def update(self, input_features,  pi, z):
         """ 
         define (z - v)^2 - pi * log(p) + c||θ||2
         """
