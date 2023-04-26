@@ -17,8 +17,8 @@ class Node():
         self.actions = [0] * CFG.history_size # for one-hot
         self.player = CFG.first_player
         self.input_features = None
-
         self.test = "default"
+        self.CFG = CFG
 
         if state:
             self.set_sefault_states(state)
@@ -31,8 +31,8 @@ class Node():
 
     def set_sefault_states(self, state):
         state = copy.deepcopy(state) 
-        w = CFG.board_width
-        h = CFG.history_size #
+        w = self.CFG.board_width
+        h = self.CFG.history_size #
         self.states = [[[0 for i in range(w)] for j in range(w)] for _ in range(h)]
         self.states.insert(0,state)
         self.states.pop(-1)
