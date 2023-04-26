@@ -22,12 +22,11 @@ class SelfPlay():
         self.agent = Agent(env, model, CFG, train=True)
 
 
-    def __call__(self, num_game_count=1):
-        """ Self playのループ処理 """
-        for game_count in range(num_game_count): # AlphaGo Zero: 250,000
-            state = self.env.reset()
-            node = Node(self.CFG, state)
-            self.play(node)
+    def __call__(self):
+        """ Self playのループ処理  (AlphaGo Zero: 250,000 回) """
+        state = self.env.reset()
+        node = Node(self.CFG, state)
+        self.play(node)
 
         """ 蓄積した経験データのセットを最大サイズで切り捨て """
         self.dataset = self.dataset[-self.CFG.max_dataset_size:]
@@ -53,20 +52,16 @@ class SelfPlay():
 
         else:
             """ 再帰的に自己対局 """
-            v = self.play(next_node, play_count + 1)
+            v = -self.play(next_node, play_count + 1)
 
         """ 履歴データを追加 """
-        if self.CFG.add_draw_data: # 引き分けを含める
-            self.add_dataset(node, action, v)
-        else: # 引き分け以外
-            if v != 0 : 
-                self.add_dataset(node, action, v)
+        self.backup(node, action, v)
 
         """ 符号を反転させて返却 """
-        return -v
+        return v
 
-    
-    def add_dataset(self, node, action, v):
+    # Add to dataset
+    def backup(self, node, action, v):
 
         """ 履歴データの設定 """
         states = copy.deepcopy(node.states)
