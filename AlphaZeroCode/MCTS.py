@@ -57,7 +57,7 @@ class MCTS():
 
         """ リーフ """
         if len(node.child_nodes) == 0:
-            v = -self.expand(node)
+            v = self.expand(node)
             self.backup(node, v)
             return v
 
