@@ -18,15 +18,21 @@ class Node():
         self.player = CFG.first_player
         self.input_features = None
 
+        self.test = "default"
+
         if state:
-            state = copy.deepcopy(state) 
-            w = CFG.board_width
-            n = CFG.history_size - 1 # 追加するので減算
-            self.states = [[[0] * w] * w] * n
-            self.states.insert(0, state)
+            self.set_sefault_states(state)
 
         """ Edge """
         self.n = 0 # 訪問回数 (visit count)
         self.w = 0 # 累計行動価値 (total action-value)
         self.p = 0 # 事前確率 (prior probability)
         self.Q = 0 # 平均行動価値 (action-value)
+
+    def set_sefault_states(self, state):
+        state = copy.deepcopy(state) 
+        w = CFG.board_width
+        h = CFG.history_size #
+        self.states = [[[0 for i in range(w)] for j in range(w)] for _ in range(h)]
+        self.states.insert(0,state)
+        self.states.pop(-1)
