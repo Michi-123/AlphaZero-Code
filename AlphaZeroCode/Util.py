@@ -43,13 +43,13 @@ class Util:
 
         print('epoch: {:02}/{} lr: {:.5f}   toatl loss: {:.5f} pi_loss: {:.5f} value_loss: {:.5f}'
             .format(
-            epoch,
-            self.CFG.num_epoch,
-            self.CFG.learning_rate,
-            epoch_loss,
-            epoch_loss_policy,
-            epoch_loss_value
-        )
+                epoch,
+                self.CFG.num_epoch,
+                self.CFG.learning_rate,
+                epoch_loss,
+                epoch_loss_policy,
+                epoch_loss_value
+            )
         )
 
     def save(self, model, iteration_counter):
@@ -96,8 +96,10 @@ class Util:
 
     def show_board(self, state, render_mode=0):
         if render_mode == 0:
-            self.show_board_text(state)
+            return
         elif render_mode == 1:
+            self.show_board_text(state)
+        elif render_mode == 2:
             self.show_board_image(state)
 
     def show_board_text(self, state):
@@ -166,6 +168,7 @@ class Util:
             edge.w = child_node.w
             edge.Q = child_node.Q
             edge.n = child_node.n
+            edge.action = child_node.action
             child_nodes.append(edge)
 
         return child_nodes
@@ -318,4 +321,139 @@ class Util:
                 f.write("{}:{}\n".format(key, dic[key]))
                 
     def show_board_from_node(self, node):
-        self.show_board_text( node.states[0])
+        self.show_board_text(node.states[0])
+
+
+    def state2feature4test(self, state, player):
+        """
+        単純に、状態から入力特徴に変換する処理。モデルの検証用。
+        Usage:
+        import torch
+        env.reset()
+        env.state[1] = [0,-1,0]
+        env.state[2] = [-1,0,1]
+        env.render()
+        input_feature = util.state2feature4test(env.state, player=1)
+        model(input_feature) # prediction
+        """
+        states = torch.FloatTensor([state])
+
+        ones = torch.ones((self.CFG.history_size, self.CFG.board_width, self.CFG.board_width))  # For state
+        turn = torch.ones((1, self.CFG.board_width, self.CFG.board_width))
+
+        state_w = (states == 1) * ones  # 現在の白面
+        state_b = (states == -1) * ones  # 現在の黒面
+        turn = (player == -1) * turn  # 手番（黒の番なら１、白の番なら０）
+
+        input_features = torch.vstack((state_w, state_b, turn))
+        input_features = torch.unsqueeze(input_features, 0)  # バッチの次元を追加
+
+        return input_features.to(self.CFG.device)
+
+
+    def dataset2html(self, dataset):
+
+        filename = '/content/dataset.html'
+
+        def write_state(f, state, piece1="○", piece2="●", blank="　"):
+            f.write('<table border=1>')
+
+            for r in range(len(state)):
+                f.write('<tr>')
+                for c in range(len(state)):
+                    if state[r][c] == 1:
+                        text = piece1
+                    elif state[r][c] == -1:
+                        text = piece2
+                    else:
+                        text = blank
+
+                    f.write("<td>" + text + "</td>")
+                f.write('</tr>')
+            f.write('</table>')
+
+
+        """ load sample data and expand """
+        dataset_size = 1000
+        print('dataset size', dataset_size)
+        # dataset = np.load(CFG.dataset_path, allow_pickle=True)
+        # dataset = dataset.tolist()
+        dataset = dataset[-dataset_size:]
+        dataset.reverse()
+
+        br = "<br>"
+        with open(filename, 'wt') as f:
+            #f.write('<style> table {border-collapse:collapse} #tr { border:1px solid #dedede;}  </style>')
+            # f.write('<style> html{font-size: 18px} </style>')
+            f.write('<body>')
+            f.write('<table border=0  style="background-color: #ccc">')
+
+            for i, row in enumerate(dataset):
+                data = row[3] # Plain data
+
+                f.write('<tr style="border: solid 10px #000; background-color: #afa">')
+
+                f.write('<td style="background-color:#FEFD95">')
+                """ State """
+                f.write('<!-- State -->')
+                write_state(f, data['state'], piece1="○", piece2="●")
+                """ Player """
+                player = "○" if data['player'] == 1 else "●"
+                f.write('Player:' + player + br)
+                """ Action """
+                f.write('Action: ' + str(data['action']) + br)
+                """ z """
+                f.write('z: ' + str(data['z']) + br)
+                f.write('</td>')
+
+                """ History  States"""
+                for state in data['states']:
+                    f.write('<td  style="background-color:#CFFF9A">')
+                    write_state(f, state, piece1="○", piece2="●")
+                    f.write('</td>')
+                f.write('<td>')
+
+                """ Features """
+                f.write('<td>')
+                f.write('<table>')
+
+                """ Features white """
+                f.write('<tr>')
+                for j in range(0, CFG.history_size):
+                    f.write('<td style="background-color:#fff">')
+                    input_feature = row[0][j]
+                    write_state(f, input_feature, piece1="○")
+                    f.write('</td>')
+                f.write('</tr>')
+
+                """ Features black """
+                f.write('<tr>')
+                for j in range(CFG.history_size, CFG.history_size + CFG.history_size):
+                    f.write('<td style="background-color:#ccc">')
+                    input_feature = row[0][j]
+                    write_state(f, input_feature, piece1="●")
+                    f.write('</td>')
+                f.write('</tr>')
+
+                f.write('</table>')
+                f.write('</td>')
+
+                """ Features turn """
+                f.write('<td>')
+                turn = row[0][-1]
+                write_state(f, turn, piece1="●", blank="○")
+                f.write('</td>')
+
+                """ pi """
+                f.write('<td>')
+                p = ""
+                for j in range(len(row[1])):
+                    p += ' {}[{:.03f}]'.format(j, row[1][j])
+                    if j + 1 % CFG.board_width == 0:
+                        p += '<br>'
+
+                f.write(p)
+                f.write('</td>')
+
+                f.write('</tr>')
+            f.write('</table>')
