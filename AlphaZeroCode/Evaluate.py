@@ -32,7 +32,7 @@ class Evaluate:
         for count in (range(play_count)):
 
             state = env.reset()
-            env.render()
+            #env.render()
 
             node1 = Node(self.CFG, state)
             node2 = Node(self.CFG, state)
