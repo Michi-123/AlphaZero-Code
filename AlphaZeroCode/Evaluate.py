@@ -18,7 +18,7 @@ class Evaluate:
         self.util = Util(CFG)
         self.render_mode = render_mode
 
-    def play_AZ_vs_AZ(self, model1, model2, play_count=1, show_board=None):
+    def play_AZ_vs_AZ(self, model1, model2, play_count=1):
         print('AlphaZero vs AlphaZero')
 
         env = self.env
