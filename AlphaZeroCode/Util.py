@@ -353,6 +353,7 @@ class Util:
 
     def dataset2html(self, dataset):
 
+        CFG = self.CFG
         filename = '/content/dataset.html'
 
         def write_state(f, state, piece1="○", piece2="●", blank="　"):
