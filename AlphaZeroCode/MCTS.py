@@ -53,7 +53,13 @@ class MCTS():
 
         return next_node
 
-    def search(self, node):
+    def search(self, node, done=False, reward=0):
+
+        """ ゲームオーバー """
+        if done:
+            v = reward
+            self.backup(node, v)
+            return v
 
         """ リーフ """
         if len(node.child_nodes) == 0:
@@ -61,26 +67,17 @@ class MCTS():
             self.backup(node, v)
             return v
 
-
         """ 選択 """
         next_node = self.select(node)
-
         _, reward, done = self.env.step(next_node.action)
 
-
-        """ ゲームオーバー """
-        if done:
-            v = -reward  # 0 or -1
-
-        else:
-            """ 探索（相手の手番で） """
-            v = -self.search(next_node)
+        """ 探索（相手の手番で） """
+        v = -self.search(next_node, done, reward)
 
         """ バックアップ """ 
         self.backup(node, v) 
 
         return v
-
 
     def select(self, node):
         """ 選択
