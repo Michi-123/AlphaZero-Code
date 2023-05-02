@@ -12,7 +12,7 @@ from . Agent import Agent
 
 class SelfPlay():
     """ 経験を収集する自己対局クラス """
-    def __init__(self, env, model, CFG):
+    def __init__(self, CFG, env, model):
         self.env = env
         self.model = model
         self.CFG = CFG
