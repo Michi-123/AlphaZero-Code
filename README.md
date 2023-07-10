@@ -7,7 +7,7 @@
 pip install AlphaZeroCode
 </pre>
 You must implement tain code with Udemy rectures.
-
+https://www.udemy.com/instructor/course/4122450/manage/basics
 On python,
 <pre>
 import AlphaZeroCode
