@@ -375,13 +375,10 @@ class Util:
 
 
         """ load sample data and expand """
-        dataset_size = 1000
-        print('dataset size', dataset_size)
-        # dataset = np.load(CFG.dataset_path, allow_pickle=True)
-        # dataset = dataset.tolist()
-        dataset = dataset[-dataset_size:]
+        print('dataset size', len(dataset))
+        dataset = dataset[-self.CFG.max_dataset_size:]
         dataset.reverse()
-
+        
         br = "<br>"
         with open(filename, 'wt') as f:
             #f.write('<style> table {border-collapse:collapse} #tr { border:1px solid #dedede;}  </style>')

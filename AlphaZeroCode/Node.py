@@ -21,7 +21,7 @@ class Node():
         self.CFG = CFG
 
         if state:
-            self.set_sefault_states(state)
+            self.set_default_states(state)
 
         """ Edge """
         self.n = 0 # 訪問回数 (visit count)
@@ -29,7 +29,7 @@ class Node():
         self.p = 0 # 事前確率 (prior probability)
         self.Q = 0 # 平均行動価値 (action-value)
 
-    def set_sefault_states(self, state):
+    def set_default_states(self, state):
         state = copy.deepcopy(state) 
         w = self.CFG.board_width
         h = self.CFG.history_size #
