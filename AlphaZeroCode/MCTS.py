@@ -37,7 +37,6 @@ class MCTS():
             """ ルートノードから再帰的に探索を実行 """
             self.search(root_node)
 
-        # self.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
         node.input_features = root_node.input_features # Copy from simulated node. Necessary for dataset.
 
         if len(root_node.child_nodes) > 0:
@@ -176,6 +175,10 @@ class MCTS():
 
         """ 次のノードへ遷移 """
         next_node = node.child_nodes[index]
+
+        # パスの処理
+        if next_node.action == self.CFG.pass_:
+            next_node.player = -node.player
 
         return next_node
 
