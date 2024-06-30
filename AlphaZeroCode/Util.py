@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @title Util
+import os
 import numpy as np
 import copy
 import time
@@ -11,6 +12,9 @@ import torch
 class Util:
     def __init__(self, CFG):
         self.CFG = CFG
+        
+        # 初回の最終更新時刻を取得
+        self.last_mtime = 0.0
 
     def show_legal_actions(self, env):
         legal_actions = env.get_legal_actions()
@@ -22,6 +26,56 @@ class Util:
             coord.append((x, y))
 
         print(coord)
+
+    # 対人データの削除（モデルを動かすときは必ず行う）
+    def delete_sub_dataset(self, file_path):
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+    # 対人データの追加処理
+    def append_sub_dataset(self, dataset):
+        # 対人データが更新されているか確認する処理
+        def is_file_updated(file_path, last_mtime):
+
+            if not os.path.exists(self.CFG.sub_dataset_path):
+                return False, last_mtime
+
+            """
+            ファイルが更新されたかどうかを判定する。
+            
+            :param file_path: ファイルのパス
+            :param last_mtime: 前回の最終更新時刻
+            :return: (更新フラグ, 最新の最終更新時刻)
+            """
+            current_mtime = os.path.getmtime(file_path)
+            if current_mtime > last_mtime:
+                return True, current_mtime
+
+            return False, last_mtime
+
+        # 対人データが更新されているか確認する
+        updated, self.last_mtime = is_file_updated(CFG.sub_dataset_path, self.last_mtime)   
+
+        if updated:
+            while True:
+                try:
+                    sub_dataset = np.load(CFG.sub_dataset_path, allow_pickle=True)
+                    break
+                except:
+                    continue
+            print()
+            print('append sub_dataset')
+            
+            # 辞書型を含むので逐次追加処理を行う
+            for data in sub_dataset:
+                dataset.append(data)
+
+            dataset = dataset[-CFG.max_dataset_size:]
+
+        return dataset
+
+
+
 
     def make_batch(self, dataset):
         """ 毎回訓練データが変わるため、DataLoaderは使わない """
@@ -93,6 +147,9 @@ class Util:
     def save_iteration_counter(self, iteration_counter_path, i):
         with open(iteration_counter_path, mode='w') as f:
             f.write(str(i))
+
+
+
 
     def show_board(self, state, render_mode=0):
         if render_mode == 0:
