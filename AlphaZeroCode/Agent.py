@@ -11,7 +11,7 @@ from .MCTS import MCTS
 class Agent:
 
     def __init__(self, env, model, CFG, train=True):
-        self.CFG = CFG
+        self.CFG = CFG # SemiSelfPlayでAgentをoverrideした時に必要
         self.env = env
 
         """ MCTSをインスタンス化 """
