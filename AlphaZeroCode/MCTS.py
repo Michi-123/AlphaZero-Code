@@ -216,3 +216,18 @@ class MCTS():
             child_node.states = states
             child_node.player = -node.player
             node.child_nodes.append(child_node)
+
+        if hasattr(self.CFG, 'pass_'):
+            # Passのノードを追加
+            action = self.CFG.pass_
+            states = copy.deepcopy(node.states)
+            actions = self.util.get_next_actions(node.actions, action)
+            child_node = Node(self.CFG)
+
+            child_node.p = p[action]
+            child_node.action = action
+            child_node.actions = actions
+            child_node.states = states
+            child_node.player = -node.player
+            node.child_nodes.append(child_node)
+                
