@@ -54,12 +54,12 @@ class Util:
             return False, last_mtime
 
         # 対人データが更新されているか確認する
-        updated, self.last_mtime = is_file_updated(CFG.sub_dataset_path, self.last_mtime)   
+        updated, self.last_mtime = is_file_updated(self.CFG.sub_dataset_path, self.last_mtime)   
 
         if updated:
             while True:
                 try:
-                    sub_dataset = np.load(CFG.sub_dataset_path, allow_pickle=True)
+                    sub_dataset = np.load(self.CFG.sub_dataset_path, allow_pickle=True)
                     break
                 except:
                     continue
@@ -70,11 +70,9 @@ class Util:
             for data in sub_dataset:
                 dataset.append(data)
 
-            dataset = dataset[-CFG.max_dataset_size:]
+            dataset = dataset[-self.CFG.max_dataset_size:]
 
         return dataset
-
-
 
 
     def make_batch(self, dataset):
