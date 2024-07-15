@@ -4,8 +4,6 @@
 
 """ SelfPlay """
 import copy
-from tqdm import tqdm
-
 from . Util import Util
 from . MCTS import Node
 from . Agent import Agent

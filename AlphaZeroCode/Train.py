@@ -24,6 +24,7 @@ class Train():
         self.running_loss_value = 0.0
         self.epoch_loss = 0.0
         self.learning_rate = None
+        self.num_epoch = CFG.num_epoch
 
         self.optimizer = optim.SGD(self.model.parameters(), 
                                    lr=CFG.learning_rate, 
@@ -42,7 +43,7 @@ class Train():
             batch_iteration_size = 1
 
         """ Train loop """
-        for epoch in (range(1, self.CFG.num_epoch + 1)):
+        for epoch in (range(1, self.num_epoch + 1)):
 
             """ 全データセットをシャッフル """
             dataset = random.sample(dataset, len(dataset)) # 再定義しているので問題ない
