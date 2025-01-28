@@ -177,8 +177,9 @@ class MCTS():
         next_node = node.child_nodes[index]
 
         # パスの処理
-        if next_node.action == self.CFG.pass_:
-            next_node.player = -node.player
+        if hasattr(self.CFG, 'pass_'):
+            if next_node.action == self.CFG.pass_:
+                next_node.player = -node.player
 
         return next_node
 
